@@ -162,7 +162,7 @@ def bfs(g,start,dest):
 	out_file=open("output.txt","w")
     	if start == dest: 
         	#print start," ",0
-		out_file.write(start.id+" "+str(0))
+		out_file.write(start.id+" "+str(0)+"\n")
         	return
     	vertQueue = Queue()
     	vertQueue.enqueue(start)
@@ -181,7 +181,7 @@ def bfs(g,start,dest):
 				#print i+" "+str(count)
 				count=count+1
 			#print dest.id+" "+str(count)
-			out_file.write(dest.id+" "+str(count))
+			out_file.write(dest.id+" "+str(count)+"\n")
 			out_file.close()
 			return 
 		explored_bfs.append(currentVert.id)
@@ -199,7 +199,7 @@ def dfs(g,start,dest):
 	out_file=open("output.txt","w")
     	if start == dest: 
         	#print start," ",0
-		out_file.write(start.id+" "+str(0))
+		out_file.write(start.id+" "+str(0)+"\n")
         	return
     	vertStack = Stack()
     	vertStack.push(start)
@@ -219,7 +219,7 @@ def dfs(g,start,dest):
 					#print i+" "+str(count)
 					count=count+1
 				#print dest.id+" "+str(count)
-				out_file.write(dest.id+" "+str(count))
+				out_file.write(dest.id+" "+str(count)+"\n")
 				out_file.close()
 				return 
 		
@@ -243,7 +243,7 @@ def ucs(g,start,dest):
 	out_file=open("output.txt","w")
     	if start == dest:
         	#print start," ",0
-		out_file.write(start.id+" "+str(0))
+		out_file.write(start.id+" "+str(0)+"\n")
         	return
     	vertPQ.insert(start,-1,0)
 	count = 0
@@ -260,7 +260,7 @@ def ucs(g,start,dest):
 				node=g.getVertex(i)
 				out_file.write(i+" "+str(vertPQ.dict[node])+"\n")
 				#print i+" "+str(vertPQ.dict[node])
-			out_file.write(dest.id+" "+str(vertPQ.dict[dest]))
+			out_file.write(dest.id+" "+str(vertPQ.dict[dest])+"\n")
 			out_file.close()
 			#print dest.id+" "+str(vertPQ.dict[dest])
 			return
@@ -272,7 +272,6 @@ def ucs(g,start,dest):
 				parent_dict[x.id]=currentVert.id
 				
 			elif x in vertPQ.items:
-				
 				parent_cost=vertPQ.path_cost(currentVert)
 				child_cost_queue=vertPQ.path_cost(x)
 				child_cost=parent_cost+int(dist)
@@ -301,7 +300,7 @@ def A(g,start,dest,sun_routes):
 	out_file=open("output.txt","w")
     	if start == dest:
         	#print start," ",sun_routes[start]
-		out_file.write(start.id+" "+str(0))
+		out_file.write(start.id+" "+str(0)+"\n")
         	return
     	vertPQ.insert(start,-1,sun_routes[start])
 	while vertPQ.size()>0:
@@ -316,8 +315,11 @@ def A(g,start,dest,sun_routes):
 			for i in sequence:
 				node=g.getVertex(i)
 				#print i+" "+str(int(vertPQ.dict[node])-int(sun_routes[node]))
-				out_file.write(i+" "+str(int(vertPQ.dict[node])-int(sun_routes[node]))+"\n")
-			out_file.write(dest.id+" "+str(int(vertPQ.dict[dest])-int(sun_routes[dest])))
+				if i == start.id:
+					out_file.write(start.id+" "+str(0)+"\n")
+				else:
+					out_file.write(i+" "+str(int(vertPQ.dict[node])-int(sun_routes[node]))+"\n")
+			out_file.write(dest.id+" "+str(int(vertPQ.dict[dest])-int(sun_routes[dest]))+"\n")
 			out_file.close()
 			#print dest.id+" "+str(vertPQ.dict[dest]-int(sun_routes[dest]))
 			return
@@ -343,7 +345,6 @@ def A(g,start,dest,sun_routes):
 				parent_cost=vertPQ.path_cost(currentVert)
 				child_cost=dist
 				child_cost_queue=vertPQ.path_cost(x)
-				temp_path=vertPQ.path_cost(x)
 				if child_cost<child_cost_queue:
 					explored_a.remove(temp)
 					vertPQ.insert(x,currentVert,dist)
@@ -352,7 +353,7 @@ def A(g,start,dest,sun_routes):
 		explored_a.append(currentVert)
 		vertPQ.items = sorted(vertPQ.items, key=vertPQ.dict.__getitem__)
 '''**************************************************************************************************'''
-obj=open('input_vasini2.txt','r')
+obj=open('input.txt','r')
 algo=obj.readline().strip()
 start=obj.readline().strip()
 dest=obj.readline().strip()
@@ -390,4 +391,4 @@ elif algo in ['UCS','ucs']:
 elif algo in ['A*','a*']:	
 	A(g,start_vertex,dest_vertex,sun_routes)
 else:
-	sys.exit(0)             
+	sys.exit(0)       
